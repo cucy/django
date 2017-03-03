@@ -162,4 +162,11 @@ settings.py # 静态文件修改 STATICFILES_DIRS =( os.path.join(BASE_DIR,'stat
 ROOT_URLCONF = 'hello_project.urls' # 定义url的分发器
 # 使用
 模式匹配代替url已经不推荐使用
+
+
+# url(正则表达式, view函数,参数,别名,前缀)
+
+#  两种方法
+# 1、函数方法方式      url(r'^hello/$', views.hello)
+# 2、字符串方式       url(r'^hello/$', 'hello.views.hello')
 ```

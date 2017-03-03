@@ -18,5 +18,12 @@ from hello import views
 
 
 urlpatterns = [
-    url(r'^hello/$', views.hello)
+    url(r'^hello/$', 'views.hello', {'a': '123'}, 'hello','hello'),
+    url(r'^test/(?P<id>\d{2})/(?P<key>\w+)/$', 'hello.views.test')
 ]
+
+# url(正则表达式, view函数,参数,别名,前缀)
+
+#  两种方法
+# 1、函数方法方式      url(r'^hello/$', views.hello)
+# 2、字符串方式       url(r'^hello/$', 'hello.views.hello')
