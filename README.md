@@ -170,3 +170,9 @@ ROOT_URLCONF = 'hello_project.urls' # 定义url的分发器
 # 1、函数方法方式      url(r'^hello/$', views.hello)
 # 2、字符串方式       url(r'^hello/$', 'hello.views.hello')
 ```
+
+## 获取get/ POST请求参数
+``` 
+request.GET.get('key')
+request.POST.post('key')
+```
