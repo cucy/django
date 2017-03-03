@@ -161,5 +161,5 @@ settings.py # 静态文件修改 STATICFILES_DIRS =( os.path.join(BASE_DIR,'stat
 ```
 ROOT_URLCONF = 'hello_project.urls' # 定义url的分发器
 # 使用
-模式匹配代替url
+模式匹配代替url已经不推荐使用
 ```
