@@ -137,3 +137,12 @@ C:\3.6\django\Lib\site-packages\django\contrib\auth\models.py
 from django.contrib.auth.models import User
 导入用户User模块,进行调用
 ```
+
+## mvt
+
+### 修改模板静态文件存放路径
+```
+settings.py # TEMPLATES ['templates']配置目录
+
+settings.py # 静态文件修改 STATICFILES_DIRS =( os.path.join(BASE_DIR,'static'), )
+```
