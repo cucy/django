@@ -94,3 +94,46 @@ Superuser created successfully.
 ```
 python manage.py   changepassword
 ```
+
+## 目录结构
+```
+.
+├── db.sqlite3
+├── hello  # hello app(一个大的项目会有不同的app, 不同的app负责不同的功能模块，一个app负责一个功能 )
+│   ├── admin.py  配置后台管理的文件
+│   ├── apps.py   app配置
+│   ├── __init__.py
+│   ├── migrations      数据库同步的脚本目录
+│   │   └── __init__.py
+│   ├── models.py     模型代码配置文件，配置数据库模型
+│   ├── tests.py      单元测试
+│   └── views.py      业务代码主要位置
+├── hello_project
+│   ├── __init__.py
+│   ├── __pycache__  存放缓存文件
+│   ├── settings.py  静态文件设置
+│   ├── urls.py      网页地址配置文件
+│   └── wsgi.py      协议的配置文件， 在项目部署使用的时候会用到这个文件
+└── manage.py
+```
+
+## 步骤
+### 在view定义一个请求处理的函数
+```
+1.
+setting.py 增加hello app的名字
+-----
+2、  views.py定义请求处理函数返回模板渲染
+3、  static存放js css 静态文件， templates模版目录
+4、  urls.py 定义访问的地址
+        有多种方法定义url, url进行模式匹配，
+        url(r'^hello$', views.hello, name='hello') # name为别名
+        hello 定义到了views。hello函数进行处理
+
+
+-------------
+C:\3.6\django\Lib\site-packages\django\contrib\auth\models.py
+
+from django.contrib.auth.models import User
+导入用户User模块,进行调用
+```
