@@ -156,3 +156,10 @@ settings.py # 静态文件修改 STATICFILES_DIRS =( os.path.join(BASE_DIR,'stat
     在app下创建 urls.py文件
 
 ```
+
+## urls.py
+```
+ROOT_URLCONF = 'hello_project.urls' # 定义url的分发器
+# 使用
+模式匹配代替url
+```
