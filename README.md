@@ -146,3 +146,13 @@ settings.py # TEMPLATES ['templates']配置目录
 
 settings.py # 静态文件修改 STATICFILES_DIRS =( os.path.join(BASE_DIR,'static'), )
 ```
+
+### 调整url
+```
+1、引入include
+    from django.conf.urls import url, include
+    url(r'^/', include('hello.urls'))
+2、
+    在app下创建 urls.py文件
+
+```
