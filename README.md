@@ -176,3 +176,12 @@ ROOT_URLCONF = 'hello_project.urls' # 定义url的分发器
 request.GET.get('key')
 request.POST.post('key')
 ```
+
+## 连接mysql
+```apple js
+连接mysql需要先导入
+
+创建数据库
+python  manage.py  makemigrations
+python manage.py migrate  （1.9以前syncdb）
+```
