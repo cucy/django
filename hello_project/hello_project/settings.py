@@ -133,3 +133,22 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS =(
     os.path.join(BASE_DIR,'static'),
                    )
+
+# 配置日志输出到控制台
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console':{
+            'level':'DEBUG',
+            'class':'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django.db.backends': {
+            'handlers': ['console'],
+            'propagate': True,
+            'level':'DEBUG',
+        },
+    }
+}

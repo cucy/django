@@ -179,6 +179,7 @@ request.POST.post('key')
 
 ## 连接mysql
 ```apple js
+pip install pymysql
 连接mysql需要先导入
 
 创建数据库
