@@ -9,6 +9,7 @@ class Publisher(models.Model):
     country = models.CharField(max_length=50)
     website = models.URLField()
 
+    # 自定义内部类显示为中文名字
     class Meta:
         verbose_name = '出版商'
         verbose_name_plural = verbose_name
