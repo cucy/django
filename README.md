@@ -226,3 +226,9 @@ class Book(models.Model):
 重新同步数据库
 python  manage.py  makemigrations
 ```
+
+## orm常用操作
+```mysql
+
+
+```

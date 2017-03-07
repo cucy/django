@@ -4,10 +4,10 @@ from django.db import models
 class Publisher(models.Model):
     name = models.CharField(max_length=30, verbose_name="名称")
     address = models.CharField("地址", max_length=50)
-    city = models.CharField(max_length=60)
-    state_province = models.CharField(max_length=30)
-    country = models.CharField(max_length=50)
-    website = models.URLField()
+    city = models.CharField("城市",max_length=60)
+    state_province = models.CharField("地址", max_length=30)
+    country = models.CharField("国家", max_length=50)
+    website = models.URLField("网址")
 
     # 自定义内部类显示为中文名字
     class Meta:
