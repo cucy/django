@@ -1,4 +1,4 @@
-"""hello_project URL Configuration
+"""fhx URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/1.9/topics/http/urls/
@@ -14,18 +14,17 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import url
-from hello import views
+from django.contrib import admin
+from blog import views
+from django.conf import settings
+from django.conf.urls.static import static
+
 
 
 urlpatterns = [
-    url(r'^hello/$', views.hello, {'a': '123'}, 'hello','hello'),
-    url(r'^test/$', views.test, name='test'),
-    url(r'^add_publisher/$', views.add_publisher, name='add_publisher')
+    url(r'^admin/', admin.site.urls),
+    url(r'^$',views.home),
+    url(r'^about.html/',views.about),
+    
+]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
-]
-
-# url(正则表达式, view函数,参数,别名,前缀)
-
-#  两种方法
-# 1、函数方法方式      url(r'^hello/$', views.hello)
-# 2、字符串方式       url(r'^hello/$', 'hello.views.hello')

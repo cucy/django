@@ -7,7 +7,14 @@ def hello(request, a):
     return render(request,'table.html', {'user_list': user_list})
 
 
-def test(request, id, key):
-	print(id)
-	print(key)
-	return render(request, 'table.html')
+def test(request):
+    return render(request, 'table.html')
+
+def add_publisher(request):
+    if request.method == 'POST':
+        # 如果post提交， 去接收用户传过来的数据
+        print(request.POST)
+    else:
+        return render(request, 'add_publisher.html', locals())
+
+
