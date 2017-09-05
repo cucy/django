@@ -81,6 +81,47 @@ def simple_view(request):
 	return HttpResponse()
 simple_view = login_required(simple_view)	
 ```
+## 确认django版本
+```python
+# 1
+# requirements.txt
+
+# 2
+$ source venv_path/bin/activate
+$ python
+>>> import django
+>>> print(django.get_version())
+1.11.4
+# 3
+$ python manage.py --version
+
+# 4
+$ cd envs/foo_env/lib/python2.7/site-packages/django
+$ cat __init__.py
+VERSION = (1, 11, 4, 'final', 0)
+```
+### 查找配置文件所在
+```
+$ find . -iname settings.py -exec grep -H 'ROOT_URLCONF' {} \;
+
+./projectname/settings.py:ROOT_URLCONF = 'projectname.urls'
+
+$ ls projectname/urls.py
+
+projectname/urls.py
+
+Jumping around the code
+```
+
+### 导出模型视图到png图片
+```
+$ sudo apt-get install python3.4-dev graphviz libgraphviz-dev pkg-config
+$ pip install git+http://github.com/pygraphviz/pygraphviz.git#egg=pygraphviz
+Next, install django-extensions and add it to your INSTALLED_APPS. Now, you are all set.
+$ python manage.py graph_models app1 app2 > models.dot
+$ dot -Tpng models.dot -o models.png
+``` 
+
 ### 访问控制
 - fbv
 ```python
