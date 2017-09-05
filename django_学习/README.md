@@ -251,4 +251,217 @@ int
 ```
 ### 不同的方式显示form
 
+| template            | code                                     | 浏览器展示                                    |
+| ------------------- | ---------------------------------------- | ---------------------------------------- |
+| {{ form.as_p }}     | `<p><label for="id_name">Name:</label> <input type="text" name="name" value="Blitz" id="id_name" required maxlength="100" /></p>` | ![form.as_p](https://github.com/cucy/django/raw/master/django_img/forms_as_p.jpg) |
+| {{ form.as_ul }}    | `<li><label for="id_name">Name:</label> <input type="text" name="name" value="Blitz" id="id_name" required maxlength="100" /></li>` | ![form.as_ul](https://github.com/cucy/django/raw/master/django_img/forms_as_ul.jpg) |
+| {{ form.as_table }} | `<tr><th><label for="id_name">Name:</label></th><td><input type="text" name="name" value="Blitz" id="id_name" required maxlength="100" /></td></tr>\n<tr><th><label for="id_age">Age:</label></th><td><input type="number" name="age" value="30" required id="id_age" /></td></tr>` | ![form.as_table](https://github.com/cucy/django/raw/master/django_img/forms_as_table.jpg) |
+
+```html
+<form method="post">
+	{% csrf_token %}
+	<table>{{ form.as_table }}</table>
+	<input type="submit" value="Submit" />
+</form>
+
+```
+- `django-crispy-forms`美化
+```
+# settings.py
+CRISPY_TEMPLATE_PACK = "bootstrap3"
+# forms.py
+from crispy_forms.helper import FormHelper
+
+from crispy_forms.layout import Submit
+
+class PersonDetailsForm(forms.Form):
+
+    name = forms.CharField(max_length=100)
+
+    age = forms.IntegerField()
+
+    def __init__(self, *args, **kwargs):
+
+        super().__init__(*args, **kwargs)
+
+        self.helper = FormHelper(self)
+
+        self.helper.layout.append(Submit('submit', 'Submit'))
+```
+### CBV forms的使用
+```
+# views.py
+class ClassBasedFormView(generic.View):
+    template_name = 'form.html'
+
+    def get(self, request):
+        form = PersonDetailsForm()
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request):
+        form = PersonDetailsForm(request.POST)
+        if form.is_valid():
+            # Success! We can use form.cleaned_data now
+            return redirect('success')
+        else:
+            # Invalid form! Reshow the form with error highlighted
+            return render(request, self.template_name,{'form': form})
+			
+# ---  使用formview----
+from django.core.urlresolvers import reverse_lazy
+
+class GenericFormView(generic.FormView):
+    template_name = 'form.html'
+    form_class = PersonDetailsForm
+    success_url = reverse_lazy("success")
+```
+
+###  `一些例子`
+#### `动态表单`
+```python
+# forms.py
+class PersonDetailsForm(forms.Form):
+    name = forms.CharField(max_length=100)
+    age = forms.IntegerField()
+
+    def __init__(self, *args, **kwargs):
+        upgrade = kwargs.pop("upgrade", False)
+        super().__init__(*args, **kwargs)
+        # Show first class option?
+		
+        if upgrade:
+            self.fields["first_class"] = forms.BooleanField(label="Fly First Class?")
+			
+# views.py
+class PersonDetailsEdit(generic.FormView):
+
+    ...
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["upgrade"] = True
+        return kwargs
+```
+#### `用户角色 表单`
+```python
+# forms.py
+from braces.forms import UserKwargModelFormMixin
+
+class PersonDetailsForm(UserKwargModelFormMixin, forms.Form):
+    ...
+	
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # Are you a member of the VIP group?
+        if self.user.groups.filter(name="VIP").exists():
+            self.fields["first_class"] = forms.BooleanField(label="Fly First Class?")
+			
+# views.py
+class VIPCheckFormView(LoginRequiredMixin, UserFormKwargsMixin, generic.FormView):
+
+   form_class = PersonDetailsForm
+    ...
+	
+```
+#### `一个页面多个modle form需要显示`
+```python
+# forms.py
+class SubscribeForm(forms.Form):
+    email = forms.EmailField()
+	
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+        self.helper.layout.append(Submit('subscribe_butn', 'Subscribe'))
+# views.py
+from .forms import SubscribeForm, UnSubscribeForm
+
+class NewsletterView(generic.TemplateView):
+    subcribe_form_class = SubscribeForm
+    unsubcribe_form_class = UnSubscribeForm
+    template_name = "newsletter.html"
+
+    def get(self, request, *args, **kwargs):
+        kwargs.setdefault("subscribe_form", self.subcribe_form_class())
+        kwargs.setdefault("unsubscribe_form", self.unsubcribe_form_class())
+        return super().get(request, *args, **kwargs)
+		
+	def post(self, request, *args, **kwargs):
+        form_args = {
+            'data': self.request.POST,
+            'files': self.request.FILES,
+        }
+
+        if "subscribe_butn" in request.POST:
+            form = self.subcribe_form_class(**form_args)
+            if not form.is_valid():
+                return self.get(request,subscribe_form=form)
+            return redirect("success_form1")
+
+        elif "unsubscribe_butn" in request.POST:
+            form = self.unsubcribe_form_class(**form_args)
+            if not form.is_valid():
+                return self.get(request,unsubscribe_form=form)
+            return redirect("success_form2")
+			
+        return super().get(request)
+```
+#### ` CRUD views`
+```python
+# models.py
+class ImportantDate(models.Model):
+    date = models.DateField()
+    desc = models.CharField(max_length=100)
+	
+    def get_absolute_url(self):
+        return reverse('impdate_detail', args=[str(self.pk)])
+
+# forms.py
+from django import forms
+from . import models
+
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Submit
+
+class ImportantDateForm(forms.ModelForm):
+	class Meta:
+        model = models.ImportantDate
+        fields = ["date", "desc"]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+        self.helper.layout.append(Submit('save', 'Save'))		
+		
+# views.py
+from django.core.urlresolvers import reverse_lazyfrom . import forms
+
+class ImpDateDetail(generic.DetailView):
+    model = models.ImportantDate
+
+class ImpDateCreate(generic.CreateView):
+    model = models.ImportantDate
+    form_class = forms.ImportantDateForm
+
+class ImpDateUpdate(generic.UpdateView):
+    model = models.ImportantDate
+    form_class = forms.ImportantDateForm
+
+class ImpDateDelete(generic.DeleteView):
+    model = models.ImportantDate
+    success_url = reverse_lazy("impdate_list")
+	
+# urls.py
+urlpatterns = [ 
+# ...
+	url(r'^impdates/create/$', pviews.ImpDateCreate.as_view(), name="impdate_create"),
+	url(r'^impdates/(?P<pk>\d+)/$',pviews.ImpDateDetail.as_view(), name="impdate_detail"),
+	url(r'^impdates/(?P<pk>\d+)/update/$',pviews.ImpDateUpdate.as_view(), name="impdate_update"),
+	url(r'^impdates/(?P<pk>\d+)/delete/$',pviews.ImpDateDelete.as_view(), name="impdate_delete"),
+# ...
+]	
+```
+
+
 
