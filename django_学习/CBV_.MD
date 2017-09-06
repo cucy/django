@@ -1,4 +1,21 @@
 
+# 名词汇总
+- get_success_url()
+- get_context_data()
+- form_class
+- model
+- template_name_suffix
+- get_absolute_url()
+- get_delete_url() *
+- get_update_url() *
+- get_form_kwargs()
+- HiddenInput()
+- get_initial()
+
+
+
+
+
 # reverse 函数
 ```
 In [26]: from django.core.urlresolvers import reverse
