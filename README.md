@@ -201,3 +201,8 @@ python  manage.py  makemigrations
 
 
 ```
+
+## log相关
+```
+logger ---> handler --->  formatter/filter --> file / email / console
+```
