@@ -1,0 +1,60 @@
+<!doctype html>{% load page_tags %}
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://cdn.bootcss.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" rel="stylesheet">
+    <title>User List</title>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">姓名</th>
+                    <th scope="col">邮箱</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for user in obj_list %}
+                    <tr>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.email }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-md-12 ">
+            <nav aria-label="...">
+                <ul class="pagination">
+
+                    {% if obj_list.has_previous %}
+                        <li class="page-item ">
+                            <a class="page-link" href="?page={{ obj_list.previous_page_number }}"
+                               tabindex="-1">上一页</a>
+                        </li>
+                    {% endif %}
+
+                    {% for pg_list  in obj_list.paginator.page_range %}
+                        {% cut_page obj_list.number pg_list %}
+                    {% endfor %}
+
+                    {% if obj_list.has_next %}
+                        <li class="page-item"><a class="page-link"  href="?page={{ obj_list.next_page_number }}">下一页</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<!-- Optional JavaScript -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js"></script>
+</body>
+</html>
